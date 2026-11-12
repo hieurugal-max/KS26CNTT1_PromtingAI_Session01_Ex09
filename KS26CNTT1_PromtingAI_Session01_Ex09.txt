@@ -1,0 +1,30 @@
+BÀI 9: KỸ THUẬT RAG GROUNDING DẬP TẮT ẢO GIÁC HỢP ĐỒNG THU MUA
+Phần 1. Phân tích nguyên nhân ảo giác
+Trong tình huống này, nhân viên Thu mua MartX hỏi AI nhưng không cung cấp hợp đồng để đối chiếu. Vì vậy, AI dựa vào kiến thức đã học và tự tạo ra câu trả lời theo những thông tin có vẻ hợp lý.
+- AI trả lời phạt 20% và đình chỉ nhập hàng 30 ngày dù hợp đồng không có quy định này.
+- Nguyên nhân là do AI bị ảo giác (Hallucination), tức là đưa ra thông tin sai nhưng diễn đạt rất tự tin.
+- AI không biết chính xác quy định riêng của MartX nếu không được cung cấp tài liệu.
+Cách khắc phục: Sử dụng RAG Grounding, tức là đưa hợp đồng thực tế vào prompt để AI chỉ dựa vào nội dung tài liệu khi trả lời.
+Phần 2. Cấu trúc RAG Prompt hoàn chỉnh
+Prompt sử dụng:
+1. VĂN BẢN HỢP ĐỒNG CHUẨN
+
+Trích nội dung hợp đồng MartX:
+
+"Nhà cung cấp giao rau bị dập nát trên 10% thì bị phạt 5% giá trị lô hàng bị dập nát và phải đổi hàng trong vòng 24 giờ."
+
+2. CÂU HỎI NGHIỆP VỤ
+
+Theo hợp đồng trên, nếu nhà cung cấp giao rau bị dập nát trên 10% thì sẽ bị xử lý như thế nào? Mức phạt được tính trên giá trị nào và thời gian đổi hàng là bao lâu?
+
+3. NEGATIVE CONSTRAINT (KHÓA AN TOÀN)
+- Chỉ sử dụng thông tin có trong văn bản hợp đồng được cung cấp
+- Không sử dụng kiến thức bên ngoài để tự bổ sung quy định
+- Không tự suy đoán mức phạt hoặc thời hạn xử lý
+- Không được tự tạo ra điều khoản không có trong hợp đồng
+- Nếu thông tin không có trong văn bản, tuyệt đối trả lời: "Không có dữ liệu trong tài liệu"
+
+Kết quả AI trả lời khi chạy thử
+- Mức phạt: 5% giá trị lô hàng bị dập nát
+- Yêu cầu: Nhà cung cấp phải đổi hàng
+- Thời hạn: Trong vòng 24 giờ
